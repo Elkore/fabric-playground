@@ -1,0 +1,46 @@
+# Operating-system files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Editor and IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python local environment and tooling artifacts
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Jupyter local state and checkpoints
+.ipynb_checkpoints/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Logs, temporary files, and local build output
+*.log
+*.tmp
+*.temp
+dist/
+build/
+out/
+
+# Fabric/local tooling scratch directories
+.fabric/
+.fabric-cache/
+.vscode/settings.json
