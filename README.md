@@ -1,1 +1,3 @@
 # fabric-playground
+
+Experimenting with Fabric and coding agents...
