@@ -1,0 +1,106 @@
+version: 2
+
+models:
+  - name: stg_customer
+    description: "Current-state from persistent CRM customers."
+
+    columns:
+      - name: customer_id
+        description: "Customer business key."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: email
+        data_tests:
+          - not_null
+
+      - name: modified_at
+        data_tests:
+          - not_null
+
+  - name: stg_product
+    description: "Current-state products."
+
+    columns:
+
+      - name: product_id
+        description: "Product business key."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: product_name
+        data_tests:
+          - not_null
+
+      - name: unit_price
+        data_tests:
+          - not_null
+
+
+  - name: stg_orders
+    description: "Current-state sales orders."
+
+    columns:
+
+      - name: order_id
+        description: "Business key uniquely identifying an order in the source system."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: "Foreign key referencing the customer that placed the order."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customer')
+                field: customer_id
+
+      - name: order_date
+        data_tests:
+          - not_null
+
+      - name: order_status
+        data_tests:
+          - not_null
+
+
+  - name: stg_order_line
+    description: "Current-state sales order lines."
+
+    columns:
+
+      - name: order_line_id
+        description: "Order line business key unique identifying the order line in the order."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: order_id
+        description: "Foreign key referencing the order."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+
+      - name: product_id
+        description: "Foreign key referencing the product that in the order."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_product')
+                field: product_id
+
+      - name: quantity
+        data_tests:
+          - not_null
+
+      - name: unit_price
+        data_tests:
+          - not_null

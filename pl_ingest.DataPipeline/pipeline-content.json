@@ -1,0 +1,49 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "3d1b275d-6352-4956-8a48-3aa3522abc1c",
+          "workspaceId": "55978fac-a8b3-4bf8-8cef-5c8a33580e6b"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "01_generate_sample_parquet_fabric",
+        "description": "genererar sample data för PoC",
+        "state": "Inactive",
+        "onInactiveMarkAs": "Succeeded",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "7f446662-39c0-a128-4b94-5e2e026ba627",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "04_generate_incrementell batch",
+        "description": "genererar incrementell batch av sample data för PoC",
+        "dependsOn": [
+          {
+            "activity": "01_generate_sample_parquet_fabric",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

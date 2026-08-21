@@ -1,0 +1,89 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "InvokeDataBuildToolJob",
+        "typeProperties": {
+          "dataBuildToolJobId": "0c5eb89a-5c44-8c10-4e18-688c725d1eaf",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "select": "path:models/staging",
+          "failFast": true,
+          "threads": 4
+        },
+        "externalReferences": {
+          "connection": "70126dbe-fec2-4ed2-8e93-28034b0ff917"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "dbt_build_staging",
+        "description": "bygger/laddar silver_staging i dw",
+        "dependsOn": []
+      },
+      {
+        "type": "InvokeDataBuildToolJob",
+        "typeProperties": {
+          "dataBuildToolJobId": "0c5eb89a-5c44-8c10-4e18-688c725d1eaf",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "select": "path:models/intermediate",
+          "failFast": true,
+          "threads": 4
+        },
+        "externalReferences": {
+          "connection": "70126dbe-fec2-4ed2-8e93-28034b0ff917"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "dbt_build_intermediate",
+        "description": "bygger/laddar silver_intermediate i dw",
+        "dependsOn": [
+          {
+            "activity": "dbt_build_staging",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "InvokeDataBuildToolJob",
+        "typeProperties": {
+          "dataBuildToolJobId": "0c5eb89a-5c44-8c10-4e18-688c725d1eaf",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "select": " path:models/marts",
+          "failFast": true,
+          "threads": 4
+        },
+        "externalReferences": {
+          "connection": "70126dbe-fec2-4ed2-8e93-28034b0ff917"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "dbt_build_marts",
+        "description": "bygger/laddar gold_datamart i dw",
+        "dependsOn": [
+          {
+            "activity": "dbt_build_intermediate",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

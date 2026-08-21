@@ -1,0 +1,171 @@
+version: 2
+
+models:
+
+  - name: dim_customer
+    description: >
+      Current-state customer dimension for analytical reporting.
+
+    columns:
+
+      - name: customer_key
+        description: "Deterministic DW surrogate key for the customer."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: >
+          Source-system business key uniquely identifying the customer.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: email
+        description: >
+          Current customer email address.
+
+
+  - name: dim_product
+    description: >
+      Current-state product dimension for analytical reporting.
+
+    columns:
+
+      - name: product_key
+        description: >
+          Deterministic DW surrogate key for the product.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: product_id
+        description: >
+          Source-system business key uniquely identifying the product.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: product_name
+        data_tests:
+          - not_null
+
+  - name: dim_date
+    description: >
+      Date dimension used for analytical reporting.
+      Contains one row per order date available in the current POC dataset.
+
+    columns:
+
+      - name: date_key
+        description: >
+          Surrogate date key in YYYYMMDD format, for example
+          20260821 for 2026-08-21.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: order_date
+        description: >
+          Calendar date represented by this dimension row.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: year
+        description: "Calendar year."
+        data_tests:
+          - not_null
+
+      - name: month_number
+        description: "Calendar month number from 1 to 12."
+        data_tests:
+          - not_null
+
+      - name: day_of_month
+        description: "Day number within the month."
+        data_tests:
+          - not_null
+
+      - name: month_name
+        description: "Calendar month name."
+        data_tests:
+          - not_null
+
+      - name: weekday_name
+        description: "Calendar weekday name."
+        data_tests:
+          - not_null
+
+
+  - name: fact_sales
+    description: >
+      Sales fact table at order-line grain.
+
+    columns:
+      
+      - name: customer_key
+        description: "Foreign key to dim_customer."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_key
+
+      - name: product_key
+        description: "Foreign key to dim_product."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product')
+                field: product_key
+
+      - name: date_key
+        description: "Foreign key to dim_date representing the order date."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+
+      - name: order_line_id
+        description: >
+          Business key identifying the source order line.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: >
+          Customer identifier relating the fact row to dim_customer.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_id
+
+      - name: product_id
+        description: >
+          Product identifier relating the fact row to dim_product.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product')
+                field: product_id
+
+      - name: order_id
+        description: >
+          Source-system business key identifying the sales order.
+        data_tests:
+          - not_null
+
+      - name: net_amount
+        description: >
+          Net sales amount after discount.
+        data_tests:
+          - not_null

@@ -1,0 +1,27 @@
+version: 2
+
+sources:
+
+  - name: crm
+    database: fabricplayground
+    schema: persistent_crm
+
+    tables:
+      - name: customer
+        description: "Append-only persistent CRM customer history"
+  - name: product
+    database: fabricplayground
+    schema: persistent_product
+
+    tables:
+      - name: product
+        description: "Append-only persistent Product product history"
+  - name: sales
+    database: fabricplayground
+    schema: persistent_sales
+
+    tables:
+      - name: orders
+        description: "Append-only persistent sales orders history"
+      - name: order_line
+        description: "Append-only persistent sales order_lines history"

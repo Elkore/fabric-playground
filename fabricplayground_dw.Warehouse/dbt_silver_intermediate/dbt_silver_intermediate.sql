@@ -1,0 +1,1 @@
+CREATE SCHEMA dbt_silver_intermediate;

@@ -1,0 +1,63 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "2fdb7747-fc20-afe5-4710-500a6e4a3781",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "02_landing_to_bronze_raw",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "500cecf3-5503-a049-4e77-e996dae5145c",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "BRONZE_RAW_ROOT": {
+              "value": "Files/bronze-raw",
+              "type": "string"
+            },
+            "META_SCHEMA": {
+              "value": "persistent_meta",
+              "type": "string"
+            },
+            "META_TABLE": {
+              "value": "ingest_log",
+              "type": "string"
+            },
+            "ALLOW_SCHEMA_EVOLUTION": {
+              "value": false,
+              "type": "bool"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "03_bronze_raw_to_persistent_delta",
+        "dependsOn": [
+          {
+            "activity": "02_landing_to_bronze_raw",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

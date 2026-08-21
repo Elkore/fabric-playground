@@ -1,0 +1,58 @@
+version: 2
+
+models:
+
+  - name: int_sales_enriched
+    description: >
+      Enriched current-state sales order lines with
+      customer, product and calculated sales amounts.
+
+    columns:
+
+      - name: order_line_id
+        description: >
+          Business key identifying an individual order line.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: order_id
+        description: >
+          Foreign key to the sales order that the order line belongs to.
+        data_tests:
+          - not_null
+
+      - name: customer_id
+        description: >
+          Foreign key identifying the customer associated with the order.
+        data_tests:
+          - not_null
+
+      - name: product_id
+        description: >
+          Foreign key identifying the product on the order line.
+        data_tests:
+          - not_null
+
+      - name: quantity
+        description: >
+          Number of product units on the order line.
+        data_tests:
+          - not_null
+
+      - name: gross_amount
+        description: >
+          Order line amount before discount, calculated as
+          quantity multiplied by unit price.
+        data_tests:
+          - not_null
+
+      - name: discount_amount
+        description: >
+          Discount amount calculated for the order line.
+
+      - name: net_amount
+        description: >
+          Order line amount after discount.
+        data_tests:
+          - not_null
